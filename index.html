@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. RESET & MAIN STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* --- 2. THE STYLISH CARD --- */
+        .container {
+            /* Glassmorphism */
+            background: rgba(255, 255, 255, 0.85);
+            padding: 3rem;
+            border-radius: 30px;
+            
+            /* Glowing Pink Shadow */
+            box-shadow: 0 20px 50px rgba(255, 64, 129, 0.25);
+            
+            /* White Border */
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            
+            text-align: center;
+            backdrop-filter: blur(10px);
+            
+            width: 650px; 
+            max-width: 90%;
+            position: relative;
+            z-index: 10;
+            transition: all 0.6s ease-in-out;
+        }
+
+        h1.question-text {
+            font-family: 'Dancing Script', cursive;
+            color: #d32f2f;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            white-space: nowrap; 
+        }
+
+        img.header-img {
+            width: 160px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- 3. BUTTONS --- */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            position: relative;
+            min-height: 60px; 
+        }
+
+        button {
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 64, 129, 0.4);
+            z-index: 20; 
+        }
+        #yesBtn:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 64, 129, 0.6); }
+
+        #noBtn {
+            /* CHANGE NO BUTTON COLOR HERE */
+            background-color: #333333; /* Dark Grey */
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            
+            position: absolute; 
+            z-index: 100;
+        }
+        #noBtn:hover { background-color: #000000; }
+
+        /* --- 4. SUCCESS LAYOUT --- */
+        .success-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            text-align: left;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards 0.5s;
+        }
+
+        .photo-frame img {
+            width: 240px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: rotate(-3deg);
+        }
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+            height: 320px; 
+        }
+
+        .lyrics-box {
+            flex: 1; 
+            overflow: hidden; 
+            position: relative;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+
+        .scrolling-text {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            color: #000000; 
+            font-family: 'Courgette', cursive; 
+            font-size: 1.4rem; 
+            line-height: 1.6;
+            text-align: center;
+            font-weight: 500;
+            animation: scrollUpLyrics 25s linear infinite; 
+        }
+
+        /* --- 5. MUSIC PLAYER --- */
+        .music-player {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar { width: 100%; height: 5px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-fill { width: 50%; height: 100%; background: linear-gradient(90deg, #ff9a9e, #ff4081); border-radius: 10px; }
+        
+        .controls { display: flex; gap: 20px; align-items: center; justify-content: center; }
+
+        .control-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            color: #555;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: #e0e0e0;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .play-pause-btn {
+            width: 55px; height: 55px;
+            background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%);
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(216, 27, 96, 0.4);
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #f50057 0%, #c2185b 100%);
+            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.5);
+        }
+
+        /* --- 6. ANIMATIONS --- */
+        @keyframes scrollUpLyrics {
+            0% { top: 100%; }
+            100% { top: -220%; } 
+        }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .bg-hearts-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+
+        .bg-floating-heart {
+            position: absolute; bottom: -20vh; 
+            opacity: 0.8; 
+            z-index: 0;   
+            animation-timing-function: linear; animation-iteration-count: infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        .explosion-particle { position: fixed; top: 50%; left: 50%; pointer-events: none; z-index: 9999; }
+
+        @media (max-width: 650px) {
+            .success-layout { flex-direction: column; }
+            .container { padding: 1.5rem; width: 90%; }
+            h1.question-text { font-size: 2.5rem; white-space: normal; }
+            .photo-frame img { width: 100%; height: auto; max-height: 250px; }
+            .right-column { width: 100%; height: auto; }
+            .lyrics-box { height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts-container" id="bgContainer"></div>
+
+    <div class="container" id="mainContainer">
+        <div id="cardContent">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2l4YnN5bnN4Ymx6ODZiZnZ4aWF6cW94Zmx6YnZ4Ymx6YnZ4Ymx6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Heart" class="header-img">
+            <h1 class="question-text">Will you be my Valentine?</h1>
+            <div class="btn-group">
+                <button id="yesBtn">Yes</button>
+                <div style="position: relative; width: 100px; height: 50px;">
+                     <button id="noBtn">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const cardContent = document.getElementById('cardContent');
+        const bgContainer = document.getElementById('bgContainer');
+        const music = document.getElementById('music');
+
+        // --- 1. Background Logic ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-floating-heart');
+            const hearts = ['💖', '💕', '💗', '❤️', '🤍'];
+            heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            const size = Math.random() * 40 + 40; 
+            heart.style.fontSize = size + 'px';
+            
+            const duration = Math.random() * 5 + 8;
+            heart.style.animation = `floatUp ${duration}s linear infinite`;
+
+            bgContainer.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, duration * 1000);
+        }
+
+        setInterval(createHeart, 400);
+
+        // --- 2. 'No' Button Logic (Anti-Vanish) ---
+        function moveNoButton() {
+            if (noBtn.parentNode !== document.body) {
+                document.body.appendChild(noBtn);
+            }
+
+            const btnRect = noBtn.getBoundingClientRect();
+            const margin = 50; 
+            
+            const maxX = window.innerWidth - btnRect.width - margin;
+            const maxY = window.innerHeight - btnRect.height - margin;
+
+            const randomX = Math.max(margin, Math.random() * maxX);
+            const randomY = Math.max(margin, Math.random() * maxY);
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            noBtn.style.zIndex = "9999"; 
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
+
+        // --- 3. 'Yes' Button Logic ---
+        yesBtn.addEventListener('click', () => {
+            music.volume = 0.6;
+            music.play().catch(e => console.log("Song file not found or interaction needed"));
+            
+            if(noBtn) noBtn.remove();
+            
+            mainContainer.style.width = '800px';
+
+            cardContent.innerHTML = `
+                <h1 class="question-text" style="font-size: 3rem; margin-bottom: 0;">To the most beautiful Soul! ❤️</h1>
+                <div class="success-layout">
+                    
+                    <div class="photo-frame">
+                        <img src="us.jpg" alt="Us">
+                    </div>
+
+                    <div class="right-column">
+                        <div class="lyrics-box">
+                            <div class="scrolling-text">
+                                Raat din dekhna tujhko aadat meri<br>
+                                Yun tujhe chaahana hai ibaadat meri<br>
+                                <br>
+                                Tum ho mera pyar, tumse hai karaar<br>
+                                Tumko hi basaaya maine yaadon mein<br>
+                                Tumse hai nasha, tumse hai khumaar<br>
+                                Tumko hi sajaya maine khwaabon mein<br>
+                                <br>
+                                Tum ho mera pyar, tumse hai karaar<br>
+                                Tumko hi basaaya maine yaadon mein<br>
+                                <br>
+                                Jism se rooh tak, hai tumhare nishaan<br>
+                                Bann gaye tum meri zindagi<br>
+                                <br>
+                                <br>
+                                <span style="font-size: 3rem;">❤️</span>
+                            </div>
+                        </div>
+
+                        <div class="music-player">
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            <div class="controls">
+                                <div class="control-btn">⏮</div>
+                                <div class="control-btn play-pause-btn">⏸</div>
+                                <div class="control-btn">⏭</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            createExplosion();
+        });
+
+        // --- 4. Explosion Logic (High Visibility) ---
+        function createExplosion() {
+            const particles = ['💖', '💍', '✨', '💋', '💌'];
+            for (let i = 0; i < 200; i++) {
+                const p = document.createElement('div');
+                p.classList.add('explosion-particle');
+                p.innerText = particles[Math.floor(Math.random() * particles.length)];
+                document.body.appendChild(p);
+                const angle = Math.random() * Math.PI * 2; 
+                const dist = Math.random() * 300 + 200; 
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist;
+                
+                p.animate([
+                    { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+                    // Scale to 2.0x for visibility
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(2.0)`, opacity: 0 }
+                ], {
+                    // Slow Motion: 2.5s to 4.5s
+                    duration: Math.random() * 2000 + 2500,
+                    easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)',
+                    fill: 'forwards'
+                }).onfinish = () => p.remove();
+            }
+        }
+    </script>
+</body>
+</html>
